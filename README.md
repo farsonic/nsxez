@@ -24,8 +24,8 @@ pip install -U nsxez
 Teh library operates on a preexisting Tier0 router and when initiated it expects you to pass a valid NSX-T manager IP address, username, password and Tier0 router name. All ongoing operations are performed against this Tier0 router enviornment. 
 
 ```python
-from nsxez import operations
-nsx = operations.device("192.168.0.22","admin","VMware1!VMware1!","Peering")
+from nsxez import operations as nsx
+dev = nsx.device("192.168.0.22","admin","VMware1!VMware1!","Peering")
 ```
 
 Example creating a new VRF called "Blue". Values to be passed are the name of the VRF, the Route Target (used for import and export) as well as the unique route distinguisher and the VNI for VXLAN overlay from the edge node to the peer. 
