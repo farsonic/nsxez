@@ -5,7 +5,7 @@ NSXEZ is a Python library to remotely manage/automate NSX-T platforms. The user 
 
 ## Installation
 
-Installation requires Python 2.7 or 3.X and the associated python pip tool. The only other requirements currently as the requests and uuid libraries which are installed automatically through pip. To install nsxez simply use the following command from your shell, provided pip is installed and operational. 
+Installation requires Python 2.7 or 3.X and the associated python pip tool. The only other requirements currently as the requests and uuid libraries which are installed automatically through pip. To install NSXEZ simply use the following command from your shell, provided pip is installed and operational. 
 
 `
 pip install nsxez
