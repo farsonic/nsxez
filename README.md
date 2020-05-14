@@ -1,6 +1,6 @@
 ## NSXEZ
 
-NSXEZ is a Python library to remotely manage/automate NSX-T platforms. The user is NOT required to be a Software Programmer, or have sophisticated knowledge of NSX-T environments, or have a complex understanding of the NSX-T REST API. It does however expect that someone has built a functional NSX-T environment which includes a functional Tier-0 router and potentially edge gatway services...if you expect to have any decent functionality. This is very much a work in progress and being updated daily at this stage. 
+NSXEZ is a Python library to remotely manage/automate NSX-T platforms. The user is NOT required to be a Software Programmer, or have sophisticated knowledge of NSX-T environments, or have a complex understanding of the NSX-T REST API. It does however expect that someone has built a functional NSX-T environment which includes a functional Tier-0 router and potentially edge gatway services and VNI pool for VRF examples...if you expect to have any decent functionality. This is very much a work in progress and being updated daily at this stage. 
 
 
 ## Installation
@@ -49,7 +49,7 @@ Example of assigning a routing distribution policy to an existing VRF instance. 
 ```python
 >>> from nsxez import operations as nsx
 >>> dev = nsx.device("192.168.0.22","admin","VMware1!VMware1!","Peering")
->>> dev.set_route_policy("ALL","VRF_1238","all")
+>>> dev.set_route_policy("ALL","Blue","all")
 ```
 
 Example output gathering route table for VRF "Blue"
