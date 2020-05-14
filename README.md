@@ -13,7 +13,7 @@ pip install nsxez
 
 ## Upgrade
 
-Upgrading has the same requiremetns as installation and has the same format for install with the addition of -U 
+Upgrading has the same requirements as installation and has the same format for install with the addition of -U 
 
 `
 pip install -U nsxez
