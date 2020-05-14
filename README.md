@@ -28,20 +28,18 @@ from nsxez import operations
 nsx = operations.device("192.168.0.22","admin","VMware1!VMware1!","Peering")
 ```
 
-Example output gathering route table for VRF "Blue" (Truncated output)
+Example output gathering route table for VRF "Blue"
 
 ```python
-from nsxez import operations
-nsx = operations.device("192.168.0.22","admin","VMware1!VMware1!","Peering")
-nsx.get_route_table("Blue")
-[{u'count': 17, u'route_entries': [{u'network': u'222.0.0.1/32', u'route_type': u'b'}]
+from nsxez import operations as nsx
+dev = nsx.device("192.168.0.22","admin","VMware1!VMware1!","Peering")
+dev.get_routing_instance("Blue")
 ```
 
-Example output gathering route table for VRF "Blue" (Truncated output)
+Example creating a new VRF called "Blue" 
 
 ```python
-from nsxez import operations
-nsx = operations.device("192.168.0.22","admin","VMware1!VMware1!","Peering")
-nsx.get_route_table("Blue")
-[{u'count': 17, u'route_entries': [{u'network': u'222.0.0.1/32', u'route_type': u'b'}]
+from nsxez import operations as nsx
+dev = nsx.device("192.168.0.22","admin","VMware1!VMware1!","Peering")
+dev.set_routing_instance("VRF_1238","65000:7001","7001","79423")
 ```
