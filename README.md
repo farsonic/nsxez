@@ -28,18 +28,18 @@ from nsxez import operations
 nsx = operations.device("192.168.0.22","admin","VMware1!VMware1!","Peering")
 ```
 
+Example creating a new VRF called "Blue". Values to be passed are the name of the VRF, the Route Target (used for import and export) as well as the unique route distinguisher and the VNI for VXLAN overlay from the edge node to the peer. 
+
+```python
+from nsxez import operations as nsx
+dev = nsx.device("192.168.0.22","admin","VMware1!VMware1!","Peering")
+dev.set_routing_instance("VRF_1238","65000:7001","7001","79423")
+```
+
 Example output gathering route table for VRF "Blue"
 
 ```python
 from nsxez import operations as nsx
 dev = nsx.device("192.168.0.22","admin","VMware1!VMware1!","Peering")
 dev.get_routing_instance("Blue")
-```
-
-Example creating a new VRF called "Blue" 
-
-```python
-from nsxez import operations as nsx
-dev = nsx.device("192.168.0.22","admin","VMware1!VMware1!","Peering")
-dev.set_routing_instance("VRF_1238","65000:7001","7001","79423")
 ```
