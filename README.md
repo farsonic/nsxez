@@ -54,7 +54,7 @@ dev = nsx.device("192.168.0.22","admin","VMware1!VMware1!","Peering")
 dev.set_route_policy("ALL","Blue","all")
 ```
 
-Example output gathering route table for VRF "Blue"
+Example output gathering EVPN routing instance details (VRF attached to a Tier0) for VRF "Blue"
 
 ```python
 from nsxez import operations as nsx
