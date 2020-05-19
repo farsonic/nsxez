@@ -4,6 +4,20 @@ import uuid
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
+'''
+Add Tier0 router (not VRF)
+Add Tier 1 router
+Change BGP AS
+Add BGP Peer 
+Add BGP Peer protocol families
+Add uplinks to router
+Add IPv6 subnet/DHCP to segment 
+Gather more information from platform for Fact 
+Get BGP neighbour status (get_bgp_neighbor, get_bgp_summary)
+
+'''
+
+
 class device:
 	def __init__(self,host,user,password,router):
 		self.host = host
@@ -11,6 +25,7 @@ class device:
 		self.password = password
 		self.router = router
 		info = self.open()
+		self.locale_path = self.get_locale_path(self.router)
 		self.router_id = info[0]
 		self.headers = {'Content-Type': 'application/json'}
 				
@@ -69,7 +84,32 @@ class device:
 					response = value['path']
 		else:
 			response = self.error(json_response.status_code)
-		return response				
+		return response		
+		
+	def get_locale_path(self,router):
+	#Pass the name of the T0 router and return the locale-path URI. 
+		json_response = requests.get('https://'+self.host+'/policy/api/v1/infra/tier-0s/'+router+'/locale-services', verify=False, auth=(self.user, self.password))
+		if json_response.status_code == 200:
+			response = json.loads(json_response.content)
+			response = response["results"]
+			for value in response:
+					response = value['path']
+		else:
+			response = self.error(json_response.status_code)
+		return response	
+		
+	def get_bgp_peer_id(self,neighbor):
+	#Pass the name of the T0 router and return the locale-path URI. 
+		json_response = requests.get('https://'+self.host+'/policy/api/v1' + self.locale_path +'/bgp/neighbors', verify=False, auth=(self.user, self.password))
+		if json_response.status_code == 200:
+			response = json.loads(json_response.content)
+			response = response["results"]
+			for value in response:
+				if value['neighbor_address'] == neighbor:
+					response = value['id']
+		else:
+			response = self.error(json_response.status_code)
+		return response		
 		
 #Route table operations 
 		
@@ -101,6 +141,7 @@ class device:
 		vrf_json = json.dumps(vrf)
 		url = "https://" + self.host + "/policy/api/v1/infra/tier-0s/" + vrf_name
 		json_response = requests.request("PATCH", url, data = vrf_json, headers=self.headers, verify=False, auth=(self.user, self.password))
+		print(json_response.text.encode('utf8'))
 		if json_response.status_code == 200:
 			response = self.get_routing_instance(vrf_name)
 		else:
@@ -113,7 +154,47 @@ class device:
 		json_response = requests.request("DELETE", url, verify=False, auth=(self.user, self.password))
 		#print("VRF deleted")
 
+#BGP operations 
 
+	def get_bgp_summary(self):
+		url = "https://" + self.host + '/policy/api/v1' + self.locale_path + '/bgp'
+		json_response = requests.request("GET", url, headers=self.headers, verify=False, auth=(self.user, self.password))
+		if json_response.status_code == 200:
+			response = json.loads(json_response.content)
+		else:
+			response = self.error(json_response.status_code)
+		return response	
+
+	def get_bgp_neighbors(self):
+		url = "https://" + self.host + '/policy/api/v1' + self.locale_path + '/bgp/neighbors'
+		json_response = requests.request("GET", url, headers=self.headers, verify=False, auth=(self.user, self.password))
+		if json_response.status_code == 200:
+			response = json.loads(json_response.content)
+		else:
+			response = self.error(json_response.status_code)
+		return response
+		
+	def get_bgp_received_routes(self,peer):
+		self.id = self.get_bgp_peer_id(peer)
+		url = "https://" + self.host + '/policy/api/v1' + self.locale_path + '/bgp/neighbors/' + self.id + '/routes'
+		json_response = requests.request("GET", url, headers=self.headers, verify=False, auth=(self.user, self.password))
+		if json_response.status_code == 200:
+			response = json.loads(json_response.content)
+		else:
+			response = self.error(json_response.status_code)
+		return response
+
+	def get_bgp_advertised_routes(self,peer):
+		self.id = self.get_bgp_peer_id(peer)
+		url = "https://" + self.host + '/policy/api/v1' + self.locale_path + '/bgp/neighbors/' + self.id + '/advertised-routes'
+		json_response = requests.request("GET", url, headers=self.headers, verify=False, auth=(self.user, self.password))
+		if json_response.status_code == 200:
+			response = json.loads(json_response.content)
+		else:
+			response = self.error(json_response.status_code)
+		return response
+		
+		
 #Networks (aka Segments)
 
 	def get_network(self,network_name):
@@ -137,10 +218,10 @@ class device:
 	def del_network(self,network_name):
 		url = "https://" + self.host + "/policy/api/v1/infra/segments/" + network_name
 		response = requests.request("DELETE", url, verify=False, auth=(self.user, self.password))
-		print("Network deleted")
+		#print("Network deleted")
 
 
-#Routing policy (Locale Services)
+#Routing policy (part of locale Services)
 
 	def get_route_policy(self,vrf_name):
 		url = "https://" + self.host + "/policy/api/v1/infra/tier-0s/" + vrf_name + "/locale-services"

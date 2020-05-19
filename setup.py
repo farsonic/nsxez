@@ -3,7 +3,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 setuptools.setup(
      name='nsxez',  
-     version='0.7',
+     version='0.8',
      author="Francois Prowse",
      author_email="nsxez@prowsehouse.com",
      description="A API abstraction package for NSX-T 3.0 and greater",
