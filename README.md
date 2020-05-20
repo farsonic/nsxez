@@ -34,30 +34,30 @@ Example creating a new VRF called "Blue". Values to be passed are the name of th
 
 ```python
 from nsxez import operations as nsx
-dev = nsx.device("192.168.0.22","admin","VMware1!VMware1!","Peering")
-dev.set_routing_instance("Blue","65000:7001","7001","79423")
+peering = nsx.device("192.168.0.22","admin","VMware1!VMware1!","Peering")
+peering.set_routing_instance("Blue","65000:7001","7001","79423")
 ```
 
 Example output creating a new network segment called "Blue_Web_Servers" and attaching to existing VRF "Blue"
 
 ```python
 from nsxez import operations as nsx
-dev = nsx.device("192.168.0.22","admin","VMware1!VMware1!","Peering")
-dev.set_network("Blue_Web_Servers","192.168.123.1","24","Blue","Overlay_TZ")
+peering = nsx.device("192.168.0.22","admin","VMware1!VMware1!","Peering")
+peering.set_network("Blue_Web_Servers","192.168.123.1","24","Blue","Overlay_TZ")
 ```
 
 Example of assigning a routing distribution policy to an existing VRF instance. Currently only supports the concept of "all routes". 
 
 ```python
 from nsxez import operations as nsx
-dev = nsx.device("192.168.0.22","admin","VMware1!VMware1!","Peering")
-dev.set_route_policy("ALL","Blue","all")
+peering = nsx.device("192.168.0.22","admin","VMware1!VMware1!","Peering")
+peering.set_route_policy("ALL","Blue","all")
 ```
 
 Example output gathering EVPN routing instance details (VRF attached to a Tier0) for VRF "Blue"
 
 ```python
 from nsxez import operations as nsx
-dev = nsx.device("192.168.0.22","admin","VMware1!VMware1!","Peering")
-dev.get_routing_instance("Blue")
+peering = nsx.device("192.168.0.22","admin","VMware1!VMware1!","Peering")
+peering.get_routing_instance("Blue")
 ```
