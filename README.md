@@ -4,6 +4,8 @@ NSXEZ is a Python library to remotely manage/automate NSX-T platforms. The user 
 
 The module will aim to provide functions of SET, DEL and GET for various API calls into the NSX-T manager, using common industry terminology. For example to read the routing table would be get_route_table() while creating an EVPN instance would be set_routing_instance(). As these are created an ongoing list of commands would/should be maintained. 
 
+This module is only using the NSX-T Policy API and doesn't use the Management API at all. This has only been tested on NSX-T 3.0+ code. 
+
 
 ## Installation
 
