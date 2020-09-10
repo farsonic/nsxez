@@ -63,3 +63,13 @@ from nsxez import operations as nsx
 peering = nsx.device("192.168.0.22","admin","VMware1!VMware1!","Peering")
 peering.get_routing_instance("Blue")
 ```
+
+Example applying a tag and scope to a virtual machine "
+
+```python
+from nsxez import operations as nsx
+peering = nsx.device("192.168.0.22","admin","VMware1!VMware1!","Peering")
+peering.set_virtual_machine_tag("Test_Server_1","Block","Prod")
+peering.del_virtual_machine_tag("Test_Server_1","Block","Prod")
+```
+
