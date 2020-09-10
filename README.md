@@ -25,7 +25,7 @@ pip install -U nsxez
 
 ## Inital usage
 
-Teh library operates on a preexisting Tier0 router and when initiated it expects you to pass a valid NSX-T manager IP address, username, password and Tier0 router name. All ongoing operations are performed against this Tier0 router enviornment. 
+The library operates on a preexisting Tier0 router and when initiated it expects you to pass a valid NSX-T manager IP address, username, password and Tier0 router name. All ongoing operations are performed against this Tier0 router enviornment. 
 
 ```python
 from nsxez import operations as nsx
