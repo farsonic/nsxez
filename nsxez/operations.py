@@ -198,7 +198,8 @@ class device:
 	def set_group(self,group_name):
 		#tz_path = self.get_transport_zone_path(tz)		
 		url = "https://" + self.host + "/policy/api/v1/infra/domains/default/groups/" + group_name
-		response = requests.request("PATCH", url, data = segment_json, headers=self.headers, verify=False, auth=(self.user, self.password))
+		segment_json = json.dumps(segment)
+		response = requests.request("PATCH", url, headers=self.headers, verify=False, auth=(self.user, self.password))
 		print(response.text.encode('utf8'))
 		print("Group created")
 
