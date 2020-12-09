@@ -58,6 +58,17 @@ class device:
 		else:
 			response = self.error(json_response.status_code)
 		return response
+		
+	def get_config(self):
+	#Pass the name of the transport zone and return the URL path 
+		json_response = requests.get('https://'+self.host+'/policy/api/v1/infra?filter=Type-', verify=False, auth=(self.user, self.password))
+		if json_response.status_code == 200:
+			response = json.loads(json_response.content)
+		else:
+			response = self.error(json_response.status_code)
+		return response				
+		
+		
 
 	def get_transport_zone_path(self,tz):
 	#Pass the name of the transport zone and return the URL path 
@@ -184,10 +195,9 @@ class device:
 			response = self.error(json_response.status_code)
 		return response
 
-	def get_bgp_advertised_routes(self,peer,router):
-		self.path = self.get_locale_path(router)
+	def get_bgp_advertised_routes(self,peer):
 		self.id = self.get_bgp_peer_id(peer)
-		url = "https://" + self.host + '/policy/api/v1' + self.path + '/bgp/neighbors/' + self.id + '/advertised-routes'
+		url = "https://" + self.host + '/policy/api/v1' + self.locale_path + '/bgp/neighbors/' + self.id + '/advertised-routes'
 		json_response = requests.request("GET", url, headers=self.headers, verify=False, auth=(self.user, self.password))
 		if json_response.status_code == 200:
 			response = json.loads(json_response.content)
@@ -253,4 +263,50 @@ class device:
 			#print(path)
 			url = "https://" + self.host + "/policy/api/v1" + path
 			response = requests.request("DELETE", url, headers=self.headers, verify=False, auth=(self.user, self.password))		
+
+#Retrieve Virtual Machine information
+
+	def get_virtual_machines(self):
+		url = "https://" + self.host + "/policy/api/v1/infra/realized-state/virtual-machines"
+		json_response = requests.request("GET", url, headers=self.headers, verify=False, auth=(self.user, self.password))
+		if json_response.status_code == 200:
+			response = json.loads(json_response.content)
+		else:
+			response = self.error(json_response.status_code)
+		return response
+
+	def get_virtual_machine_id(self,vm_name):
+		url = "https://" + self.host + "/policy/api/v1/infra/realized-state/virtual-machines"
+		json_response = requests.request("GET", url, headers=self.headers, verify=False, auth=(self.user, self.password))
+		if json_response.status_code == 200:
+			response = json.loads(json_response.content)
+			response = response["results"]
+			for value in response:
+				if value['display_name'] == vm_name:
+					response = value['external_id']	
+		else:
+			response = "Not Found"
+		return response	
+		
+			
+#Tag Virtual Machines
+
+	def set_virtual_machine_tag(self,vm_name, tag_name, scope):
+		id = uuid.uuid4()
+		vm_id = self.get_virtual_machine_id(vm_name)
+		tag = {'tag': {'scope': scope, 'tag': tag_name },'apply_to': [{'resource_type': 'VirtualMachine','resource_ids':[ vm_id]}]}
+		tag_json = json.dumps(tag)
+		url = "https://" + self.host + "/policy/api/v1/infra/tags/tag-operations/"+str(id)
+		response = requests.request("PUT", url, data = tag_json, headers=self.headers, verify=False, auth=(self.user, self.password))
+		#print(response.text.encode('utf8'))
+		
+	def del_virtual_machine_tag(self,vm_name, tag_name, scope):
+		id = uuid.uuid4()
+		vm_id = self.get_virtual_machine_id(vm_name)
+		tag = {'tag': {'scope': scope, 'tag': tag_name },'remove_from': [{'resource_type': 'VirtualMachine','resource_ids':[ vm_id]}]}
+		tag_json = json.dumps(tag)
+		url = "https://" + self.host + "/policy/api/v1/infra/tags/tag-operations/"+str(id)
+		response = requests.request("PUT", url, data = tag_json, headers=self.headers, verify=False, auth=(self.user, self.password))
+		#print(response.text.encode('utf8'))
+
 		
