@@ -194,6 +194,7 @@ class device:
 			response = self.error(json_response.status_code)
 		return response
 		
+#Security Groups		
 		
 #Networks (aka Segments)
 
